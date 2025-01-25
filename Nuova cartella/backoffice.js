@@ -2,6 +2,9 @@ const Urlapi = "https://striveschool-api.herokuapp.com/api/product/";
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkzNjgxMmI3NDcwMTAwMTU4YjJiNWMiLCJpYXQiOjE3Mzc3MTM2ODMsImV4cCI6MTczODkyMzI4M30.6rQd10oV76TvWggiCXmPbvhAecQqbFH4X78pKjB8iUs";
 
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("appId");
+
 //seleziono gli elementi che mi servono
 const productForm = document.getElementById("Productform");
 const productList = document.getElementById("productList");
@@ -50,8 +53,8 @@ fetchallProducts();
 
 submitBtn.addEventListener("click", () => {
   const id = document.getElementById("productId").value;
-  const method = id ? "PUT" : "POST";
-  const url = id ? `${Urlapi}${id}` : Urlapi;
+  const method = productId ? "PUT" : "POST";
+  const url = productId ? `${Urlapi}${productId}` : Urlapi;
 
   const payload = {
     name: document.getElementById("Productname").value,
@@ -75,15 +78,15 @@ submitBtn.addEventListener("click", () => {
       }
     })
     .then(() => {
-      showAlert(id ? "Product updated succesfully" : "Product added successfully");
+      showAlert(productId ? "Product updated succesfully" : "Product added successfully");
       productForm.reset();
       fetchallProducts();
     })
     .catch((err) => console.log(err));
 });
 
-function productEdit(id) {
-  fetch(`${Urlapi} ${id}`, {
+function productEdit(productId) {
+  fetch(`${Urlapi} ${productId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -104,8 +107,8 @@ function productEdit(id) {
     .catch((err) => console.log(err));
 }
 
-function deleteProduct(id) {
-  fetch(`${Urlapi}${id}`, {
+function deleteProduct(productId) {
+  fetch(`${Urlapi}${productId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
